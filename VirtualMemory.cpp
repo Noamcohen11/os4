@@ -99,12 +99,12 @@ void VMinitialize()
 VirtualAdressStruct __VMaccess(uint64_t virtualAddress)
 {
     VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
-    word_t *curr_address = 0;
-    word_t *new_address = new word_t;
+    word_t curr_address = 0;
+    word_t new_address;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
         std::cout << "DFS address: " << (uint64_t)curr_address * PAGE_SIZE + va.tables[i] << "\n";
-        PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], new_address);
+        PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], &new_address);
         if (new_address == 0)
         {
             new_address = __DFS();
