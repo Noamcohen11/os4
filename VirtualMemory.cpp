@@ -62,13 +62,9 @@ word_t *__DFS(word_t *root = 0, int depth = 0)
     bool empty = true;
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        std::cout << "Shit \n";
-        std::cout << "DFS address: " << (uint64_t)root << "\n";
         PMread((uint64_t)root * PAGE_SIZE + i, new_root);
-        std::cout << "new root: " << new_root << "\n";
         if (new_root != 0)
         {
-            std::cout << "new root is not 0 \n";
             empty = false;
             empty_table = __DFS(new_root, depth + 1);
             if (empty_table != 0)
@@ -107,8 +103,9 @@ VirtualAdressStruct __VMaccess(uint64_t virtualAddress)
     word_t *new_address;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
-        // std::cout << "DFS address: " << (uint64_t)curr_address * PAGE_SIZE + va.tables[i] << "\n";
+        std::cout << "DFS address: " << (uint64_t)curr_address * PAGE_SIZE + va.tables[i] << "\n";
         PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], new_address);
+        std::cout << "Shit \n";
         if (new_address == 0)
         {
             new_address = __DFS();
