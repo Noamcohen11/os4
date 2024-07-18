@@ -13,6 +13,7 @@ std::unordered_map<uint64_t, page_t> swapFile;
 
 void initialize()
 {
+    std::cout << "initialized \n";
     RAM.resize(NUM_FRAMES, page_t(PAGE_SIZE));
 }
 
@@ -34,7 +35,6 @@ void PMwrite(uint64_t physicalAddress, word_t value)
     //    std::cout << "write " << value << " into physical address " << physicalAddress<< std::endl;
     if (RAM.empty())
     {
-        std::cout << "initialized \n";
         initialize();
     }
 
