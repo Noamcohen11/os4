@@ -20,12 +20,15 @@ void PMread(uint64_t physicalAddress, word_t *value)
 {
 
     if (RAM.empty())
+    {
+        std::cout << "init ram \n";
         initialize();
+    }
     std::cout << "DFS address: " << physicalAddress << " RAM SIZE: " << RAM_SIZE << "\n";
     assert(physicalAddress < RAM_SIZE);
     std::cout << "passed assert \n";
 
-    *value = RAM[0][0];
+    *value = RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE];
     std::cout << "read " << *value << " from physical address " << physicalAddress << std::endl;
 }
 
