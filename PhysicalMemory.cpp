@@ -20,10 +20,7 @@ void PMread(uint64_t physicalAddress, word_t *value)
 {
 
     if (RAM.empty())
-    {
-        std::cout << "init ram \n";
         initialize();
-    }
     std::cout << "DFS address: " << physicalAddress << " RAM SIZE: " << RAM_SIZE << "\n";
     assert(physicalAddress < RAM_SIZE);
     std::cout << "passed assert \n";
@@ -36,7 +33,10 @@ void PMwrite(uint64_t physicalAddress, word_t value)
 {
     //    std::cout << "write " << value << " into physical address " << physicalAddress<< std::endl;
     if (RAM.empty())
+    {
+        std::cout << "initialized \n";
         initialize();
+    }
 
     assert(physicalAddress < RAM_SIZE);
 
