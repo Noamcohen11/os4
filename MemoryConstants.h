@@ -14,7 +14,6 @@ typedef int word_t;
 // in this implementation this is also the number of entries in a table
 #define PAGE_SIZE (1LL << OFFSET_WIDTH)
 
-
 // number of bits in a physical address
 #define PHYSICAL_ADDRESS_WIDTH 10
 // RAM size in words
@@ -31,7 +30,7 @@ typedef int word_t;
 // number of pages in the virtual memory
 #define NUM_PAGES (VIRTUAL_MEMORY_SIZE / PAGE_SIZE)
 
-#define CEIL(VARIABLE) ( (VARIABLE - (int)VARIABLE)==0 ? (int)VARIABLE : (int)VARIABLE+1 )
+#define CEIL(VARIABLE) ((VARIABLE - (int)VARIABLE) == 0 ? (int)VARIABLE : (int)VARIABLE + 1)
 
 #define TABLES_DEPTH CEIL((((VIRTUAL_ADDRESS_WIDTH - OFFSET_WIDTH) / (double)OFFSET_WIDTH)))
 
