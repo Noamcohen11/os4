@@ -26,7 +26,7 @@ void PMread(uint64_t physicalAddress, word_t *value)
     std::cout << "DFS address: " << physicalAddress << " RAM SIZE: " << RAM_SIZE << "\n";
 
     *value = RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE];
-    //    std::cout << "read " << *value << " from physical address " << physicalAddress << std::endl;
+    std::cout << "read " << *value << " from physical address " << physicalAddress << std::endl;
 }
 
 void PMwrite(uint64_t physicalAddress, word_t value)
