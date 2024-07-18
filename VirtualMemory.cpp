@@ -105,7 +105,6 @@ VirtualAdressStruct __VMaccess(uint64_t virtualAddress)
     {
         std::cout << "DFS address: " << (uint64_t)curr_address * PAGE_SIZE + va.tables[i] << "\n";
         PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], new_address);
-        std::cout << "Shit \n";
         if (new_address == 0)
         {
             new_address = __DFS();
