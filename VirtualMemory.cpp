@@ -62,6 +62,7 @@ word_t *__DFS(word_t *root = 0, int depth = 0)
     bool empty = true;
     for (int i = 0; i < PAGE_SIZE; i++)
     {
+        std::cout << "Shit \n";
         std::cout << "DFS address: " << (uint64_t)root << "\n";
         PMread((uint64_t)root * PAGE_SIZE + i, new_root);
         std::cout << "new root: " << new_root << "\n";
