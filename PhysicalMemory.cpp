@@ -13,7 +13,6 @@ std::unordered_map<uint64_t, page_t> swapFile;
 
 void initialize()
 {
-    std::cout << "initialized \n";
     RAM.resize(NUM_FRAMES, page_t(PAGE_SIZE));
 }
 
@@ -22,17 +21,14 @@ void PMread(uint64_t physicalAddress, word_t *value)
 
     if (RAM.empty())
         initialize();
-    std::cout << "DFS address: " << physicalAddress << " RAM SIZE: " << RAM_SIZE << "\n";
     assert(physicalAddress < RAM_SIZE);
-    std::cout << "passed assert \n";
-
+    std::cout << "RAM ad 0: " << RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE] << std::endl;
     *value = RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE];
     std::cout << "read " << *value << " from physical address " << physicalAddress << std::endl;
 }
 
 void PMwrite(uint64_t physicalAddress, word_t value)
 {
-    std::cout << "write " << value << " into physical address " << physicalAddress << std::endl;
     if (RAM.empty())
     {
         initialize();
