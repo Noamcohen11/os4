@@ -25,7 +25,7 @@ void PMread(uint64_t physicalAddress, word_t *value)
     assert(physicalAddress < RAM_SIZE);
     std::cout << "passed assert \n";
 
-    *value = RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE];
+    *value = RAM[0][0];
     std::cout << "read " << *value << " from physical address " << physicalAddress << std::endl;
 }
 
