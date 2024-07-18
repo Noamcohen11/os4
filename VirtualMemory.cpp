@@ -62,10 +62,12 @@ word_t *__DFS(word_t *root = 0, int depth = 0)
     bool empty = true;
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        // std::cout << "DFS address: " << (uint64_t)root * PAGE_SIZE + i << "\n";
+        std::cout << "DFS address: " << (uint64_t)root * PAGE_SIZE + i << "\n";
         PMread((uint64_t)root * PAGE_SIZE + i, new_root);
+        std::cout << "new root: " << new_root << "\n";
         if (new_root != 0)
         {
+            std::cout << "new root is not 0 \n";
             empty = false;
             empty_table = __DFS(new_root, depth + 1);
             if (empty_table != 0)
@@ -78,6 +80,7 @@ word_t *__DFS(word_t *root = 0, int depth = 0)
     {
         return root;
     }
+    std::cout << "finished DFS step\n";
     return 0;
 }
 
