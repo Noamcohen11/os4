@@ -8,6 +8,8 @@
 #include <iostream>
 #include <bitset>
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
 struct VirtualAdressStruct
 {
     uint64_t page;
@@ -41,6 +43,34 @@ struct VirtualAdressStruct
     }
 };
 
+struct Victim
+{
+    uint64_t emptyAddress;
+    uint64_t maxFrame;
+    uint64_t longestDistnaceAddress;
+    uint64_t parentAddress;
+
+    Victim()
+    {
+        emptyAddress = 0;
+        maxFrame = 0;
+    }
+
+    Victim(uint64_t emptyAddress, uint64_t parentAddress)
+    {
+        emptyAddress = emptyAddress;
+        parentAddress = parentAddress;
+    }
+
+    Victim(uint64_t maxFrame, uint64_t longestDistnace, uint64_t parentAddress)
+    {
+        maxFrame = maxFrame;
+        emptyAddress = 0;
+        longestDistnace = longestDistnace;
+        parentAddress = parentAddress;
+    }
+};
+
 void __clearFrame(uint64_t frame)
 {
     uint64_t start = frame * PAGE_SIZE;
@@ -50,35 +80,80 @@ void __clearFrame(uint64_t frame)
     }
 }
 
-word_t __DFS(word_t root = 0, int depth = 0)
+uint64_t __get_cylindrical_distance(uint64_t address_a, uint64_t address_b)
+{
+    uint64_t bigger = (address_a > address_b) ? address_a : address_b;
+    uint64_t smaller = (address_a > address_b) ? address_b : address_a;
+    uint64_t result1 = NUM_PAGES - (bigger - smaller);
+    uint64_t result2 = bigger - smaller;
+    return (result1 < result2) ? result1 : result2;
+}
+
+Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t parentAddress = 0)
 {
     if (depth == TABLES_DEPTH)
     {
-        return 0;
+        return Victim();
     }
 
     word_t new_root;
-    word_t empty_table;
+    Victim curr_table;
     bool empty = true;
+    uint64_t max_distance_address = NULL;
+    uint64_t max_frame_address = 0;
+    uint64_t newParentAddress;
+
     for (int i = 0; i < PAGE_SIZE; i++)
     {
         PMread((uint64_t)root * PAGE_SIZE + i, &new_root);
         if (new_root != 0)
         {
             empty = false;
-            empty_table = __DFS(new_root, depth + 1);
-            if (empty_table != 0)
+            curr_table = __DFS(base_address, new_root, depth + 1, (uint64_t)root * PAGE_SIZE + i);
+            if (curr_table.emptyAddress != 0)
             {
-                return empty_table;
+                return curr_table;
             }
+            if (max_distance_address == NULL)
+            {
+                max_distance_address = curr_table.longestDistnaceAddress;
+            }
+            if (__get_cylindrical_distance(base_address, max_distance_address) <
+                __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress))
+            {
+                max_distance_address = __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress);
+                newParentAddress = (uint64_t)root * PAGE_SIZE + i;
+            }
+            max_frame_address = MAX(max_frame_address, curr_table.maxFrame);
         }
     }
-    if (empty == true)
+    if (empty == true && root != base_address)
     {
-        return root;
+        return Victim((uint64_t)root, parentAddress);
     }
-    std::cout << "finished DFS step\n";
-    return 0;
+    return Victim(max_frame_address, max_distance_address, newParentAddress);
+}
+
+word_t __create_frame(VirtualAdressStruct va, word_t curr_address, Victim victim)
+{
+    word_t address;
+    if (victim.emptyAddress != 0)
+    {
+        address = victim.emptyAddress;
+        PMwrite(victim.parentAddress, 0);
+    }
+    else if (victim.maxFrame != NUM_FRAMES - 1)
+    {
+        address = victim.maxFrame + 1;
+    }
+    else
+    {
+        address = victim.longestDistnaceAddress;
+        PMwrite(victim.parentAddress, 0);
+        PMevict(address, va.page);
+    }
+    PMwrite(curr_address, address);
+    return address;
 }
 
 /*
@@ -96,32 +171,40 @@ void VMinitialize()
  * returns 0 on failure (if the address cannot be mapped to a physical
  * address for any reason)
  */
-VirtualAdressStruct __VMaccess(uint64_t virtualAddress)
+/* TODO: check address*/
+word_t __VMaccess(uint64_t virtualAddress)
 {
     VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
     word_t curr_address = 0;
     word_t new_address;
+    Victim victim;
+    word_t new_frame;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
-        std::cout << "DFS address: " << (uint64_t)curr_address * PAGE_SIZE + va.tables[i] << "\n";
         PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], &new_address);
         if (new_address == 0)
         {
-            new_address = __DFS();
-            if (new_address == 0)
+            victim = __DFS(curr_address);
+            new_address = victim.emptyAddress;
+            new_frame = __create_frame(va, curr_address, victim);
+            if (i < TABLES_DEPTH - 1)
             {
-                // std::cerr << "No empty frame found" << std::endl;
-                return va;
+                __clearFrame(i);
+            }
+            else
+            {
+                PMrestore(new_frame, va.page);
             }
         }
         curr_address = new_address;
     }
-    return va;
+    return new_address;
 }
 
 int VMread(uint64_t virtualAddress, word_t *value)
 {
-    return 1;
+    word_t address = __VMaccess(virtualAddress);
+    PMread(address, value);
 }
 
 /* writes a word to the given virtual address
@@ -132,7 +215,8 @@ int VMread(uint64_t virtualAddress, word_t *value)
  */
 int VMwrite(uint64_t virtualAddress, word_t value)
 {
-    return 1;
+    word_t address = __VMaccess(virtualAddress);
+    PMwrite(address, value);
 }
 
 int main()
