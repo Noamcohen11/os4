@@ -103,7 +103,7 @@ VirtualAdressStruct __VMaccess(uint64_t virtualAddress)
     word_t *new_address = new word_t;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
-        std::cout << "DFS address: " << (uint64_t)(*curr_address) * PAGE_SIZE + va.tables[i] << "\n";
+        std::cout << "DFS address: " << (uint64_t)curr_address * PAGE_SIZE + va.tables[i] << "\n";
         PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], new_address);
         if (new_address == 0)
         {
