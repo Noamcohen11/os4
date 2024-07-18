@@ -50,19 +50,19 @@ void __clearFrame(uint64_t frame)
     }
 }
 
-word_t *__DFS(word_t *root = 0, int depth = 0)
+word_t __DFS(word_t root = 0, int depth = 0)
 {
     if (depth == TABLES_DEPTH)
     {
         return 0;
     }
 
-    word_t *new_root;
-    word_t *empty_table;
+    word_t new_root;
+    word_t empty_table;
     bool empty = true;
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        PMread((uint64_t)root * PAGE_SIZE + i, new_root);
+        PMread((uint64_t)root * PAGE_SIZE + i, &new_root);
         if (new_root != 0)
         {
             empty = false;
