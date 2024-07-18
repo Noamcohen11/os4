@@ -140,9 +140,9 @@ int main()
     VMinitialize();
     uint64_t testAddress = 256;
     VirtualAdressStruct va(testAddress);
-    va.printAddress();
+    // va.printAddress();
 
-    std::cout << "Testing VMaccess with address: " << testAddress << "\n";
+    // std::cout << "Testing VMaccess with address: " << testAddress << "\n";
     VirtualAdressStruct va_accessed = __VMaccess(testAddress);
     va_accessed.printAddress();
 
