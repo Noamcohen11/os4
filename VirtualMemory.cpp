@@ -132,7 +132,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
     }
-    std::cout << "empty: " << empty << "are they equal: " << root - base_address << std::endl;
+    std::cout << "empty: " << empty << "base_address: " << base_address << " root: " << root << std::endl;
     if (empty == true && root != base_address)
     {
         std::cout << "empty table found" << std::endl;
