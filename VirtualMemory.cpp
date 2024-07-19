@@ -107,7 +107,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
     word_t new_root;
     Victim curr_table;
     bool empty = true;
-    word_t max_distance_address = root;
+    word_t max_distance_address = 0;
     uint64_t max_frame_address = 0;
     uint64_t newParentAddress = parentAddress;
 
@@ -123,9 +123,10 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             {
                 return curr_table;
             }
-            if (__get_cylindrical_distance(base_address, max_distance_address) <
-                __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress))
+            if ((max_distance_address = 0) || (__get_cylindrical_distance(base_address, max_distance_address) <
+                                               __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress)))
             {
+                std::cout << "max_distance_address: " << max_distance_address << " newParentAddress: " << newParentAddress << std::endl;
                 max_distance_address = curr_table.longestDistnaceAddress;
                 newParentAddress = (uint64_t)root * PAGE_SIZE + i;
             }
