@@ -151,6 +151,7 @@ word_t __create_frame(VirtualAdressStruct va, uint64_t curr_address, Victim vict
     }
     else
     {
+        std::cout << "max frame reached" << std::endl;
         address = victim.longestDistnaceAddress;
         PMwrite(victim.parentAddress, 0);
         PMevict(address, va.page);
