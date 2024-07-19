@@ -99,7 +99,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
     word_t new_root;
     Victim curr_table;
     bool empty = true;
-    uint64_t max_distance_address = NULL;
+    uint64_t max_distance_address = 0;
     uint64_t max_frame_address = 0;
     uint64_t newParentAddress;
 
@@ -114,7 +114,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             {
                 return curr_table;
             }
-            if (max_distance_address == NULL)
+            if (max_distance_address == 0)
             {
                 max_distance_address = curr_table.longestDistnaceAddress;
             }
@@ -164,13 +164,6 @@ void VMinitialize()
     __clearFrame(0);
 }
 
-/* reads a word from the given virtual address
- * and puts its content in *value.
- *
- * returns 1 on success.
- * returns 0 on failure (if the address cannot be mapped to a physical
- * address for any reason)
- */
 /* TODO: check address*/
 word_t __VMaccess(uint64_t virtualAddress)
 {
@@ -201,10 +194,18 @@ word_t __VMaccess(uint64_t virtualAddress)
     return new_address;
 }
 
+/* reads a word from the given virtual address
+ * and puts its content in *value.
+ *
+ * returns 1 on success.
+ * returns 0 on failure (if the address cannot be mapped to a physical
+ * address for any reason)
+ */
 int VMread(uint64_t virtualAddress, word_t *value)
 {
     word_t address = __VMaccess(virtualAddress);
     PMread(address, value);
+    return 1;
 }
 
 /* writes a word to the given virtual address
@@ -217,6 +218,7 @@ int VMwrite(uint64_t virtualAddress, word_t value)
 {
     word_t address = __VMaccess(virtualAddress);
     PMwrite(address, value);
+    return 1;
 }
 
 int main()
