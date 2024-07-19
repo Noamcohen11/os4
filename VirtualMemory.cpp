@@ -133,7 +133,6 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
         std::cout << "empty table found" << std::endl;
         return Victim((uint64_t)root, parentAddress);
     }
-    std::cout << "max_frame_address: " << max_frame_address << std::endl;
     return Victim(max_frame_address, max_distance_address, newParentAddress);
 }
 
@@ -147,6 +146,7 @@ word_t __create_frame(VirtualAdressStruct va, word_t curr_address, Victim victim
     }
     else if (victim.maxFrame != NUM_FRAMES - 1)
     {
+        std::cout << "max_frame_address: " << victim.maxFrame << std::endl;
         address = victim.maxFrame + 1;
     }
     else
