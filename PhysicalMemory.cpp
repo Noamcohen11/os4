@@ -23,7 +23,7 @@ void PMread(uint64_t physicalAddress, word_t *value)
         initialize();
     assert(physicalAddress < RAM_SIZE);
     *value = RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE];
-    std::cout << "read " << *value << " from physical address " << physicalAddress << std::endl;
+    // std::cout << "read " << *value << " from physical address " << physicalAddress << std::endl;
 }
 
 void PMwrite(uint64_t physicalAddress, word_t value)
@@ -34,7 +34,7 @@ void PMwrite(uint64_t physicalAddress, word_t value)
     }
 
     assert(physicalAddress < RAM_SIZE);
-    std::cout << "write " << value << " to physical address " << physicalAddress << std::endl;
+    // std::cout << "write " << value << " to physical address " << physicalAddress << std::endl;
     RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE] = value;
 }
 
