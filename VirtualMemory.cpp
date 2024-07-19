@@ -237,6 +237,6 @@ int main()
     VirtualAdressStruct va(testAddress);
     // va.printAddress();
     VMwrite(testAddress, 3);
-    VMread(testAddress, &value);
+    VMread(6, &value);
     return 0;
 }
