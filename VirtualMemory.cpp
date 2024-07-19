@@ -130,7 +130,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             {
                 max_distance_address = curr_table.longestDistnaceAddress;
                 newParentAddress = curr_table.parentAddress;
-                std::cout << "curr_table.longestDistnaceAddress: " << curr_table.longestDistnaceAddress << std::endl;
+                std::cout << "root: " << root << " curr_table.longestDistnaceAddress: " << curr_table.longestDistnaceAddress << std::endl;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
