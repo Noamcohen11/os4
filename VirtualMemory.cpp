@@ -60,7 +60,7 @@ struct Victim
     {
         emptyAddress = 0;
         maxFrame = 0;
-        longestDistnaceInput = longestDistnaceInput;
+        longestDistnaceAddress = longestDistnaceInput;
         parentAddress = parentAddressInput;
     }
 
