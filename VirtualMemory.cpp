@@ -125,14 +125,15 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
                 max_distance_address = __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress);
                 newParentAddress = (uint64_t)root * PAGE_SIZE + i;
             }
-            std::cout << "max_frame_address: " << max_frame_address << " curr_table.maxFrame: " << curr_table.maxFrame << std::endl;
             max_frame_address = MAX(max_frame_address, curr_table.maxFrame);
         }
     }
     if (empty == true && root != base_address)
     {
+        std::cout << "empty table found" << std::endl;
         return Victim((uint64_t)root, parentAddress);
     }
+    std::cout << "max_frame_address: " << max_frame_address << std::endl;
     return Victim(max_frame_address, max_distance_address, newParentAddress);
 }
 
