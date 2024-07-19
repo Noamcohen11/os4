@@ -238,5 +238,6 @@ int main()
     // va.printAddress();
     VMwrite(testAddress, 3);
     VMread(6, &value);
+    VMread(31, &value);
     return 0;
 }
