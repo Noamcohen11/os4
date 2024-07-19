@@ -192,8 +192,7 @@ word_t __VMaccess(uint64_t virtualAddress)
             }
         }
         curr_address = new_address;
-        printRam();
-    }
+        }
     return new_address;
 }
 
@@ -228,7 +227,7 @@ int VMwrite(uint64_t virtualAddress, word_t value)
 int main()
 {
     VMinitialize();
-    uint64_t testAddress = 13;
+    uint64_t testAddress = 256;
     VirtualAdressStruct va(testAddress);
     // va.printAddress();
 
