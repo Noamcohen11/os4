@@ -56,18 +56,18 @@ struct Victim
         maxFrame = 0;
     }
 
-    Victim(uint64_t emptyAddress, uint64_t parentAddress)
+    Victim(uint64_t emptyAddressInput, uint64_t parentAddressInput)
     {
-        emptyAddress = emptyAddress;
-        parentAddress = parentAddress;
+        emptyAddress = emptyAddressInput;
+        parentAddress = parentAddressInput;
     }
 
-    Victim(uint64_t maxFrame, uint64_t longestDistnace, uint64_t parentAddress)
+    Victim(uint64_t maxFrameInput, uint64_t longestDistnaceInput, uint64_t parentAddressInput)
     {
-        maxFrame = maxFrame;
+        maxFrame = maxFrameInput;
         emptyAddress = 0;
-        longestDistnace = longestDistnace;
-        parentAddress = parentAddress;
+        longestDistnaceAddress = longestDistnaceInput;
+        parentAddress = parentAddressInput;
     }
 };
 
@@ -134,7 +134,6 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
         return Victim((uint64_t)root, parentAddress);
     }
     Victim victim = Victim(max_frame_address, max_distance_address, newParentAddress);
-    std::cout << "max_frame_address: " << max_frame_address << " constuctor max frame: " << victim.maxFrame << std::endl;
     return victim;
 }
 
