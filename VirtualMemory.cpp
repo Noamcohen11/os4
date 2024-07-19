@@ -145,6 +145,7 @@ word_t __create_frame(VirtualAdressStruct va, word_t curr_address, Victim victim
     }
     else if (victim.maxFrame != NUM_FRAMES - 1)
     {
+        std::cout << "max frame: " << victim.maxFrame << std::endl;
         address = victim.maxFrame + 1;
     }
     else
@@ -192,7 +193,7 @@ word_t __VMaccess(uint64_t virtualAddress)
             }
         }
         curr_address = new_address;
-        }
+    }
     return new_address;
 }
 
