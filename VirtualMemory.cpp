@@ -137,7 +137,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
     return Victim(max_frame_address, max_distance_address, newParentAddress);
 }
 
-word_t __create_frame(VirtualAdressStruct va, word_t curr_address, Victim victim)
+word_t __create_frame(VirtualAdressStruct va, uint64_t curr_address, Victim victim)
 {
     word_t address;
     if (victim.emptyAddress != 0)
@@ -175,14 +175,16 @@ word_t __VMaccess(uint64_t virtualAddress)
     word_t new_address;
     Victim victim;
     word_t new_frame;
+    uint64_t physical_address;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
         std::cout << "read in VMACCESS" << std::endl;
-        PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], &new_address);
+        physical_address = (uint64_t)curr_address * PAGE_SIZE + va.tables[i];
+        PMread(physical_address, &new_address);
         if (new_address == 0)
         {
             victim = __DFS(curr_address);
-            new_frame = __create_frame(va, curr_address, victim);
+            new_frame = __create_frame(va, physical_address, victim);
             new_address = new_frame;
             if (i < TABLES_DEPTH - 1)
             {
