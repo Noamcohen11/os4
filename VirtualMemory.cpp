@@ -238,6 +238,7 @@ int main()
     // va.printAddress();
     VMwrite(testAddress, 3);
     VMread(6, &value);
+    std::cout << "///////////////////////// start read from 31 /////////////////////////" << std::endl;
     VMread(31, &value);
     return 0;
 }
