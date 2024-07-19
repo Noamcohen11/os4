@@ -234,8 +234,6 @@ int main()
     uint64_t testAddress = 13;
     VirtualAdressStruct va(testAddress);
     // va.printAddress();
-    VirtualAdressStruct va_accessed = VMwrite(testAddress, 3);
-    va_accessed.printAddress();
-
+    VMwrite(testAddress, 3);
     return 0;
 }
