@@ -34,7 +34,7 @@ void PMwrite(uint64_t physicalAddress, word_t value)
     }
 
     assert(physicalAddress < RAM_SIZE);
-
+    std::cout << "write " << value << " to physical address " << physicalAddress << std::endl;
     RAM[physicalAddress / PAGE_SIZE][physicalAddress % PAGE_SIZE] = value;
 }
 
