@@ -229,7 +229,7 @@ int VMwrite(uint64_t virtualAddress, word_t value)
 int main()
 {
     VMinitialize();
-    uint64_t testAddress = 256;
+    uint64_t testAddress = 13;
     VirtualAdressStruct va(testAddress);
     // va.printAddress();
 
