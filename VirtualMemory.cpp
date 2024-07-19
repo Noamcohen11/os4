@@ -128,9 +128,9 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             if ((max_distance_address = 0) || (__get_cylindrical_distance(base_address, max_distance_address) <
                                                __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress)))
             {
-                std::cout << "curr_table.longestDistnaceAddress: " << curr_table.longestDistnaceAddress << std::endl;
                 max_distance_address = curr_table.longestDistnaceAddress;
                 newParentAddress = curr_table.parentAddress;
+                std::cout << "curr_table.longestDistnaceAddress: " << curr_table.longestDistnaceAddress << std::endl;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
