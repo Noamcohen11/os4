@@ -153,12 +153,12 @@ word_t __create_frame(VirtualAdressStruct va, uint64_t curr_address, Victim vict
     {
         std::cout << "longestDistnaceAddress: " << victim.longestDistnaceAddress << std::endl;
         address = victim.longestDistnaceAddress;
-        std::cout << "address: " << address << std::endl;
+        std::cout << "victim.parentAddress: " << victim.parentAddress << std::endl;
         PMwrite(victim.parentAddress, 0);
         std::cout << "wrote in distance" << std::endl;
         PMevict(address, va.page);
         std::cout << "evicted" << std::endl;
-        }
+    }
     PMwrite(curr_address, address);
     return address;
 }
