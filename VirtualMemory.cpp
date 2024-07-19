@@ -105,6 +105,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
 
     for (int i = 0; i < PAGE_SIZE; i++)
     {
+        std::cout << "read in DFS" << std::endl;
         PMread((uint64_t)root * PAGE_SIZE + i, &new_root);
         if (new_root != 0)
         {
@@ -174,6 +175,7 @@ word_t __VMaccess(uint64_t virtualAddress)
     word_t new_frame;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
+        std::cout << "read in VMACCESS" << std::endl;
         PMread((uint64_t)curr_address * PAGE_SIZE + va.tables[i], &new_address);
         if (new_address == 0)
         {
@@ -204,6 +206,7 @@ word_t __VMaccess(uint64_t virtualAddress)
 int VMread(uint64_t virtualAddress, word_t *value)
 {
     word_t address = __VMaccess(virtualAddress);
+    std::cout << "read in VMread" << std::endl;
     PMread(address, value);
     return 1;
 }
