@@ -233,8 +233,10 @@ int main()
 {
     VMinitialize();
     uint64_t testAddress = 13;
+    word_t value;
     VirtualAdressStruct va(testAddress);
     // va.printAddress();
     VMwrite(testAddress, 3);
+    VMread(testAddress, &value);
     return 0;
 }
