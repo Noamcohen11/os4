@@ -128,11 +128,11 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             {
                 max_distance_address = curr_table.longestDistnaceAddress;
                 newParentAddress = curr_table.parentAddress;
-                std::cout << "max_distance_address: " << max_distance_address << " newParentAddress: " << newParentAddress << std::endl;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
     }
+    std::cout << "empty: " << empty << "are they equal: " << root - base_address << std::endl;
     if (empty == true && root != base_address)
     {
         std::cout << "empty table found" << std::endl;
@@ -195,10 +195,12 @@ word_t __VMaccess(VirtualAdressStruct va)
             new_address = new_frame;
             if (i < TABLES_DEPTH - 1)
             {
+                /*TODO: Dont do this if we are in an empty frame*/
                 __clearFrame(new_frame);
             }
             else
             {
+                /*TODO: make sure we only restore leafs.*/
                 PMrestore(new_frame, va.page);
             }
         }
