@@ -182,8 +182,8 @@ word_t __VMaccess(uint64_t virtualAddress)
         if (new_address == 0)
         {
             victim = __DFS(curr_address);
-            new_address = victim.emptyAddress;
             new_frame = __create_frame(va, curr_address, victim);
+            new_address = new_frame;
             if (i < TABLES_DEPTH - 1)
             {
                 __clearFrame(new_frame);
