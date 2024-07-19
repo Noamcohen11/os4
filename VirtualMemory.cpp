@@ -47,7 +47,7 @@ struct Victim
 {
     uint64_t emptyAddress;
     uint64_t maxFrame;
-    uint64_t longestDistnaceAddress;
+    word_t longestDistnaceAddress;
     uint64_t parentAddress;
 
     Victim()
@@ -56,13 +56,21 @@ struct Victim
         maxFrame = 0;
     }
 
+    Victim(word_t longestDistnaceInput, uint64_t parentAddressInput)
+    {
+        emptyAddress = 0;
+        maxFrame = 0;
+        longestDistnaceInput = longestDistnaceInput;
+        parentAddress = parentAddressInput;
+    }
+
     Victim(uint64_t emptyAddressInput, uint64_t parentAddressInput)
     {
         emptyAddress = emptyAddressInput;
         parentAddress = parentAddressInput;
     }
 
-    Victim(uint64_t maxFrameInput, uint64_t longestDistnaceInput, uint64_t parentAddressInput)
+    Victim(uint64_t maxFrameInput, word_t longestDistnaceInput, uint64_t parentAddressInput)
     {
         maxFrame = maxFrameInput;
         emptyAddress = 0;
@@ -93,15 +101,15 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
 {
     if (depth == TABLES_DEPTH)
     {
-        return Victim();
+        return Victim(root, parentAddress);
     }
 
     word_t new_root;
     Victim curr_table;
     bool empty = true;
-    uint64_t max_distance_address = 0;
+    word_t max_distance_address = root;
     uint64_t max_frame_address = 0;
-    uint64_t newParentAddress;
+    uint64_t newParentAddress = parentAddress;
 
     for (int i = 0; i < PAGE_SIZE; i++)
     {
@@ -115,18 +123,11 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             {
                 return curr_table;
             }
-            if (max_distance_address == 0)
-            {
-                max_distance_address = curr_table.longestDistnaceAddress;
-            }
             if (__get_cylindrical_distance(base_address, max_distance_address) <
                 __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress))
             {
-                max_distance_address = __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress);
+                max_distance_address = curr_table.longestDistnaceAddress;
                 newParentAddress = (uint64_t)root * PAGE_SIZE + i;
-                std::cout << "max_distance_address: " << max_distance_address << std::endl;
-                std::cout << "root: " << root << std::endl;
-                std::cout << "newParentAddress: " << newParentAddress << std::endl;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
