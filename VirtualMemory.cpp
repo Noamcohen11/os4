@@ -234,9 +234,7 @@ int main()
     uint64_t testAddress = 13;
     VirtualAdressStruct va(testAddress);
     // va.printAddress();
-
-    // std::cout << "Testing VMaccess with address: " << testAddress << "\n";
-    VirtualAdressStruct va_accessed = __VMaccess(testAddress);
+    VirtualAdressStruct va_accessed = VMwrite(testAddress, 3);
     va_accessed.printAddress();
 
     return 0;
