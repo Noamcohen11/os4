@@ -168,9 +168,8 @@ void VMinitialize()
 }
 
 /* TODO: check address*/
-word_t __VMaccess(uint64_t virtualAddress)
+word_t __VMaccess(VirtualAdressStruct va)
 {
-    VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
     word_t curr_address = 0;
     word_t new_address;
     Victim victim;
@@ -209,9 +208,10 @@ word_t __VMaccess(uint64_t virtualAddress)
  */
 int VMread(uint64_t virtualAddress, word_t *value)
 {
-    word_t address = __VMaccess(virtualAddress);
+    VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
+    word_t address = __VMaccess(va);
     std::cout << "read in VMread" << std::endl;
-    PMread(address, value);
+    PMread((uint64_t)address * PAGE_SIZE + va.offset, value);
     return 1;
 }
 
@@ -223,8 +223,9 @@ int VMread(uint64_t virtualAddress, word_t *value)
  */
 int VMwrite(uint64_t virtualAddress, word_t value)
 {
-    word_t address = __VMaccess(virtualAddress);
-    PMwrite(address, value);
+    VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
+    word_t address = __VMaccess(va);
+    PMwrite((uint64_t)address * PAGE_SIZE + va.offset, value);
     return 1;
 }
 
