@@ -140,7 +140,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
         std::cout << "empty table found" << std::endl;
         return Victim((uint64_t)root, parentAddress);
     }
-    std::cout << "max_distance_address: " << max_distance_address << std::endl;
+    std::cout << "root: " << root << " max_distance_address: " << max_distance_address << std::endl;
     return Victim(max_frame_address, max_distance_address, newParentAddress);
 }
 
