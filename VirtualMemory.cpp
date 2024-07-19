@@ -134,7 +134,7 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
         return Victim((uint64_t)root, parentAddress);
     }
     Victim victim = Victim(max_frame_address, max_distance_address, newParentAddress);
-    std::cout << "max_frame_address: " << victim.maxFrame << std::endl;
+    std::cout << "max_frame_address: " << max_frame_address << " constuctor max frame: " << victim.maxFrame << std::endl;
     return victim;
 }
 
