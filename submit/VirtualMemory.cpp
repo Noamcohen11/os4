@@ -2,12 +2,7 @@
 #include "PhysicalMemory.h"
 
 #include <bitset>
-
-template <typename T>
-T max(T a, T b)
-{
-    return (a > b) ? a : b;
-}
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 struct VirtualAdressStruct
 {
@@ -112,7 +107,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
                 newParentAddress = curr_table.parentAddress;
                 // std::cout << "max_distance_va " << max_distance_va << " max_distance_pa " << max_distance_pa << std::endl;
             }
-            max_frame_address = max(max(max_frame_address, curr_table.maxFrame), static_cast<uint64_t>(new_root));
+            max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
     }
     if (empty == true && root != base_pa)
