@@ -243,7 +243,7 @@ int VMwrite(uint64_t virtualAddress, word_t value)
 int main()
 {
     VMinitialize();
-    uint64_t testAddress = 13;
+    uint64_t testAddress = 127;
     word_t value;
     VirtualAdressStruct va(testAddress);
     va.printAddress();
