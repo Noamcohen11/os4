@@ -92,7 +92,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         Victim victim = Victim();
         victim.longestDistnaceAddress = virtualAddress;
         victim.parentAddress = parentAddress;
-        std::cout << "leaf virtual address: " << root << "parent address: " << parentAddress << std::endl;
+        std::cout << "leaf virtual address: " << virtualAddress << "parent address: " << parentAddress << std::endl;
         return victim;
     }
 
