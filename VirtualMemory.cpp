@@ -20,20 +20,6 @@ struct VirtualAdressStruct
             tables[TABLES_DEPTH - 1 - i] = (page >> (OFFSET_WIDTH * i)) & page_mask;
         }
     }
-
-    // void printAddress()
-    // {
-    // std::cout << "Page: 0b" << std::bitset<64>(page) << "\n";
-    // std::cout << "Offset: 0b" << std::bitset<OFFSET_WIDTH>(offset) << "\n";
-    // std::cout << "Tables: \n";
-    // for (int i = 0; i < TABLES_DEPTH; i++)
-    // {
-    // std::cout << "depth " << i << " 0b" << std::bitset<OFFSET_WIDTH>(tables[i]);
-    // if (i < TABLES_DEPTH - 1)
-    // std::cout << "\n";
-    // }
-    // std::cout << "\n";
-    // }
 };
 
 struct Victim
@@ -98,10 +84,10 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
     uint64_t max_frame_address = 0;
     uint64_t newParentAddress = parentAddress;
 
-    std::cout << "starting for loop" << std::endl;
+    // std::cout << "starting for loop" << std::endl;
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        std::cout << "read in DFS" << std::endl;
+        // std::cout << "read in DFS" << std::endl;
         PMread((uint64_t)root * PAGE_SIZE + i, &new_root);
         if (new_root != 0)
         {
@@ -118,20 +104,20 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
                 max_distance_va = curr_table.evicted_va;
                 max_distance_pa = curr_table.evicted_pa;
                 newParentAddress = curr_table.parentAddress;
-                std::cout << "max_distance_va " << max_distance_va << " max_distance_pa " << max_distance_pa << std::endl;
+                // std::cout << "max_distance_va " << max_distance_va << " max_distance_pa " << max_distance_pa << std::endl;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
     }
     if (empty == true && root != base_pa)
     {
-        std::cout << "empty table found" << std::endl;
+        // std::cout << "empty table found" << std::endl;
         Victim victim = Victim();
         victim.parentAddress = parentAddress;
         victim.emptyAddress = (uint64_t)root;
         return victim;
     }
-    std::cout << "root " << root << " max_distance_va " << max_distance_va << " max_distance_pa " << max_distance_pa << std::endl;
+    // std::cout << "root " << root << " max_distance_va " << max_distance_va << " max_distance_pa " << max_distance_pa << std::endl;
     return Victim(max_frame_address, max_distance_va, max_distance_pa, newParentAddress);
 }
 
@@ -179,7 +165,7 @@ word_t __VMaccess(VirtualAdressStruct va)
     uint64_t physical_address;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
-        std::cout << "read in VMACCESS" << std::endl;
+        // std::cout << "read in VMACCESS" << std::endl;
         physical_address = (uint64_t)curr_address * PAGE_SIZE + va.tables[i];
         PMread(physical_address, &new_address);
         if (new_address == 0)
