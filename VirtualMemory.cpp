@@ -109,7 +109,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         if (new_root != 0)
         {
             empty = false;
-            curr_table = __DFS(base_pa, new_root, depth + 1, (uint64_t)root * PAGE_SIZE + i, virtualAddress << OFFSET_WIDTH + i);
+            curr_table = __DFS(base_pa, base_va, new_root, depth + 1, (uint64_t)root * PAGE_SIZE + i, virtualAddress << OFFSET_WIDTH + i);
             if (curr_table.emptyAddress != 0)
             {
                 return curr_table;
