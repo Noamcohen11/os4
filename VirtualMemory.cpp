@@ -1,6 +1,7 @@
 #include "VirtualMemory.h"
 #include "PhysicalMemory.h"
-
+#include <cstdio>
+#include <cassert>
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 struct VirtualAdressStruct
