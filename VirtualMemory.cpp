@@ -49,7 +49,8 @@ struct Victim
 {
     uint64_t emptyAddress;
     uint64_t maxFrame;
-    word_t longestDistnaceAddress;
+    word_t evicted_pa;
+    word_t evicted_va;
     uint64_t parentAddress;
 
     Victim()
@@ -62,7 +63,7 @@ struct Victim
     {
         maxFrame = maxFrameInput;
         emptyAddress = 0;
-        longestDistnaceAddress = longestDistnaceInput;
+        evicted_va = longestDistnaceInput;
         parentAddress = parentAddressInput;
     }
 };
@@ -90,7 +91,8 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
     if (depth == TABLES_DEPTH)
     {
         Victim victim = Victim();
-        victim.longestDistnaceAddress = virtualAddress;
+        victim.evicted_va = virtualAddress;
+        victim.evicted_pa = root;
         victim.parentAddress = parentAddress;
         std::cout << "leaf virtual address: " << virtualAddress << "parent address: " << parentAddress << std::endl;
         return victim;
@@ -116,10 +118,10 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
                 return curr_table;
             }
             if ((max_distance_address == 0) || (__get_cylindrical_distance(base_va, max_distance_address) <
-                                                __get_cylindrical_distance(base_va, curr_table.longestDistnaceAddress)))
+                                                __get_cylindrical_distance(base_va, curr_table.evicted_va)))
             {
 
-                max_distance_address = curr_table.longestDistnaceAddress;
+                max_distance_address = curr_table.evicted_va;
                 newParentAddress = curr_table.parentAddress;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
@@ -150,12 +152,12 @@ word_t __create_frame(VirtualAdressStruct va, uint64_t curr_address, Victim vict
     }
     else
     {
-        std::cout << "longestDistnaceAddress: " << victim.longestDistnaceAddress << std::endl;
-        address = victim.longestDistnaceAddress;
+        std::cout << "evicted_va: " << victim.evicted_va << std::endl;
+        address = victim.evicted_va;
         std::cout << "victim.parentAddress: " << victim.parentAddress << std::endl;
         PMwrite(victim.parentAddress, 0);
         std::cout << "wrote in distance" << std::endl;
-        PMevict(address, va.page);
+        PMevict(address, victim.evicted_va);
         std::cout << "evicted" << std::endl;
     }
     PMwrite(curr_address, address);
