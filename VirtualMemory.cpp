@@ -1,15 +1,6 @@
 #include "VirtualMemory.h"
 #include "PhysicalMemory.h"
 
-// TODO: REMOVE THIS.
-#include <cstdio>
-#include <cassert>
-
-#include <iostream>
-#include <bitset>
-
-// TODO: Genral handle of offset.
-
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 struct VirtualAdressStruct
@@ -30,19 +21,19 @@ struct VirtualAdressStruct
         }
     }
 
-    void printAddress()
-    {
-        std::cout << "Page: 0b" << std::bitset<64>(page) << "\n";
-        std::cout << "Offset: 0b" << std::bitset<OFFSET_WIDTH>(offset) << "\n";
-        std::cout << "Tables: \n";
-        for (int i = 0; i < TABLES_DEPTH; i++)
-        {
-            std::cout << "depth " << i << " 0b" << std::bitset<OFFSET_WIDTH>(tables[i]);
-            if (i < TABLES_DEPTH - 1)
-                std::cout << "\n";
-        }
-        std::cout << "\n";
-    }
+    // void printAddress()
+    // {
+    // std::cout << "Page: 0b" << std::bitset<64>(page) << "\n";
+    // std::cout << "Offset: 0b" << std::bitset<OFFSET_WIDTH>(offset) << "\n";
+    // std::cout << "Tables: \n";
+    // for (int i = 0; i < TABLES_DEPTH; i++)
+    // {
+    // std::cout << "depth " << i << " 0b" << std::bitset<OFFSET_WIDTH>(tables[i]);
+    // if (i < TABLES_DEPTH - 1)
+    // std::cout << "\n";
+    // }
+    // std::cout << "\n";
+    // }
 };
 
 struct Victim
@@ -95,7 +86,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         victim.evicted_va = virtualAddress;
         victim.evicted_pa = root;
         victim.parentAddress = parentAddress;
-        std::cout << "leaf virtual address: " << virtualAddress << "parent address: " << parentAddress << std::endl;
+        // std::cout << "leaf virtual address: " << virtualAddress << "parent address: " << parentAddress << std::endl;
         return victim;
     }
 
@@ -109,7 +100,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
 
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        std::cout << "read in DFS" << std::endl;
+        // std::cout << "read in DFS" << std::endl;
         PMread((uint64_t)root * PAGE_SIZE + i, &new_root);
         if (new_root != 0)
         {
@@ -132,7 +123,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
     }
     if (empty == true && root != base_pa)
     {
-        std::cout << "empty table found" << std::endl;
+        // std::cout << "empty table found" << std::endl;
         Victim victim = Victim();
         victim.parentAddress = parentAddress;
         victim.emptyAddress = (uint64_t)root;
@@ -155,14 +146,14 @@ word_t __create_frame(VirtualAdressStruct va, uint64_t curr_address, Victim vict
     }
     else
     {
-        std::cout << "evicted_va: " << victim.evicted_va << std::endl;
-        std::cout << "evicted_pa: " << victim.evicted_pa << std::endl;
+        // std::cout << "evicted_va: " << victim.evicted_va << std::endl;
+        // std::cout << "evicted_pa: " << victim.evicted_pa << std::endl;
         address = victim.evicted_pa;
-        std::cout << "victim.parentAddress: " << victim.parentAddress << std::endl;
+        // std::cout << "victim.parentAddress: " << victim.parentAddress << std::endl;
         PMwrite(victim.parentAddress, 0);
-        std::cout << "wrote in distance" << std::endl;
+        // std::cout << "wrote in distance" << std::endl;
         PMevict(address, victim.evicted_va);
-        std::cout << "evicted" << std::endl;
+        // std::cout << "evicted" << std::endl;
     }
     PMwrite(curr_address, address);
     return address;
@@ -176,7 +167,6 @@ void VMinitialize()
     __clearFrame(0);
 }
 
-/* TODO: check address*/
 word_t __VMaccess(VirtualAdressStruct va)
 {
     word_t curr_address = 0;
@@ -186,7 +176,7 @@ word_t __VMaccess(VirtualAdressStruct va)
     uint64_t physical_address;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
-        std::cout << "read in VMACCESS" << std::endl;
+        // std::cout << "read in VMACCESS" << std::endl;
         physical_address = (uint64_t)curr_address * PAGE_SIZE + va.tables[i];
         PMread(physical_address, &new_address);
         if (new_address == 0)
@@ -196,12 +186,10 @@ word_t __VMaccess(VirtualAdressStruct va)
             new_address = new_frame;
             if (i < TABLES_DEPTH - 1)
             {
-                /*TODO: Dont do this if we are in an empty frame*/
                 __clearFrame(new_frame);
             }
             else
             {
-                /*TODO: make sure we only restore leafs.*/
                 PMrestore(new_frame, va.page);
             }
         }
@@ -221,7 +209,7 @@ int VMread(uint64_t virtualAddress, word_t *value)
 {
     VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
     word_t address = __VMaccess(va);
-    std::cout << "read in VMread" << std::endl;
+    // std::cout << "read in VMread" << std::endl;
     PMread((uint64_t)address * PAGE_SIZE + va.offset, value);
     return 1;
 }
@@ -246,15 +234,15 @@ int main()
     uint64_t testAddress = 127;
     word_t value;
     VirtualAdressStruct va(testAddress);
-    va.printAddress();
+    // va.printAddress();
     VMwrite(testAddress, 3);
-    std::cout << "///////////////////////// start read from 6 /////////////////////////" << std::endl;
+    // std::cout << "///////////////////////// start read from 6 /////////////////////////" << std::endl;
     VMread(6, &value);
-    std::cout << "///////////////////////// start read from 31 /////////////////////////" << std::endl;
+    // std::cout << "///////////////////////// start read from 31 /////////////////////////" << std::endl;
     VMread(31, &value);
-    std::cout << "///////////////////////// start read from 13 /////////////////////////" << std::endl;
+    // std::cout << "///////////////////////// start read from 13 /////////////////////////" << std::endl;
     VMread(testAddress, &value);
-    std::cout << "///////////////////////// end /////////////////////////" << std::endl;
+    // std::cout << "///////////////////////// end /////////////////////////" << std::endl;
 
     return 0;
 }
