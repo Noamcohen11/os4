@@ -111,6 +111,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         PMread((uint64_t)root * PAGE_SIZE + i, &new_root);
         if (new_root != 0)
         {
+            std::cout << "new root is not zero" << std::endl;
             empty = false;
             curr_table = __DFS(base_pa, base_va, new_root, depth + 1, (uint64_t)root * PAGE_SIZE + i, (virtualAddress * PAGE_SIZE) + i);
             if (curr_table.emptyAddress != 0)
