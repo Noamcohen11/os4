@@ -59,11 +59,12 @@ struct Victim
         maxFrame = 0;
     }
 
-    Victim(uint64_t maxFrameInput, word_t longestDistnaceInput, uint64_t parentAddressInput)
+    Victim(uint64_t maxFrameInput, word_t evicted_va_input, uint64_t evicted_pa_input, uint64_t parentAddressInput)
     {
         maxFrame = maxFrameInput;
         emptyAddress = 0;
-        evicted_va = longestDistnaceInput;
+        evicted_va = evicted_va_input;
+        evicted_pa = evicted_pa_input;
         parentAddress = parentAddressInput;
     }
 };
@@ -101,7 +102,8 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
     word_t new_root;
     Victim curr_table;
     bool empty = true;
-    word_t max_distance_address = 0;
+    word_t max_distance_va = 0;
+    uint64_t max_distance_pa = 0;
     uint64_t max_frame_address = 0;
     uint64_t newParentAddress = parentAddress;
 
@@ -117,11 +119,12 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
             {
                 return curr_table;
             }
-            if ((max_distance_address == 0) || (__get_cylindrical_distance(base_va, max_distance_address) <
-                                                __get_cylindrical_distance(base_va, curr_table.evicted_va)))
+            if ((max_distance_va == 0) || (__get_cylindrical_distance(base_va, max_distance_va) <
+                                           __get_cylindrical_distance(base_va, curr_table.evicted_va)))
             {
 
-                max_distance_address = curr_table.evicted_va;
+                max_distance_va = curr_table.evicted_va;
+                max_distance_pa = curr_table.evicted_pa;
                 newParentAddress = curr_table.parentAddress;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
@@ -135,7 +138,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         victim.emptyAddress = (uint64_t)root;
         return victim;
     }
-    return Victim(max_frame_address, max_distance_address, newParentAddress);
+    return Victim(max_frame_address, max_distance_va, max_distance_pa, newParentAddress);
 }
 
 word_t __create_frame(VirtualAdressStruct va, uint64_t curr_address, Victim victim)
