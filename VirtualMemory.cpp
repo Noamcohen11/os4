@@ -106,7 +106,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
 
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        // std::cout << "read in DFS" << std::endl;
+        std::cout << "read in DFS" << std::endl;
         PMread((uint64_t)root * PAGE_SIZE + i, &new_root);
         if (new_root != 0)
         {
@@ -130,7 +130,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
     }
     if (empty == true && root != base_pa)
     {
-        // std::cout << "empty table found" << std::endl;
+        std::cout << "empty table found" << std::endl;
         Victim victim = Victim();
         victim.parentAddress = parentAddress;
         victim.emptyAddress = (uint64_t)root;
@@ -183,7 +183,7 @@ word_t __VMaccess(VirtualAdressStruct va)
     uint64_t physical_address;
     for (int i = 0; i < TABLES_DEPTH; i++)
     {
-        // std::cout << "read in VMACCESS" << std::endl;
+        std::cout << "read in VMACCESS" << std::endl;
         physical_address = (uint64_t)curr_address * PAGE_SIZE + va.tables[i];
         PMread(physical_address, &new_address);
         if (new_address == 0)
