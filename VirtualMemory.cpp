@@ -1,13 +1,6 @@
 #include "VirtualMemory.h"
 #include "PhysicalMemory.h"
 
-// TODO: REMOVE THIS.
-#include <cstdio>
-#include <cassert>
-
-#include <iostream>
-#include <bitset>
-
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 struct VirtualAdressStruct
