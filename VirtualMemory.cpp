@@ -90,7 +90,9 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
     if (depth == TABLES_DEPTH)
     {
         Victim victim = Victim();
+        std::cout << "$$$$$$$$" << "virtualAddress" << virtualAddress << "$$$$$$$$$$$$ " << std::endl;
         victim.longestDistnaceAddress = virtualAddress;
+        std::cout << "$$$$$$$$" << "victim.longestDistnaceAddress" << victim.longestDistnaceAddress << "$$$$$$$$$$$$ " << std::endl;
         victim.parentAddress = parentAddress;
         return victim;
     }
