@@ -124,7 +124,6 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
                 max_distance_va = curr_table.evicted_va;
                 max_distance_pa = curr_table.evicted_pa;
                 newParentAddress = curr_table.parentAddress;
-                std::cout << "max_distance_va " << max_distance_va << " max_distance_pa " << max_distance_pa << std::endl;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
@@ -137,6 +136,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         victim.emptyAddress = (uint64_t)root;
         return victim;
     }
+    std::cout << "root " << root << " max_distance_va " << max_distance_va << " max_distance_pa " << max_distance_pa << std::endl;
     return Victim(max_frame_address, max_distance_va, max_distance_pa, newParentAddress);
 }
 
