@@ -58,20 +58,6 @@ struct Victim
         maxFrame = 0;
     }
 
-    Victim(word_t longestDistnaceInput, uint64_t parentAddressInput)
-    {
-        emptyAddress = 0;
-        maxFrame = 0;
-        longestDistnaceAddress = longestDistnaceInput;
-        parentAddress = parentAddressInput;
-    }
-
-    Victim(uint64_t emptyAddressInput, uint64_t parentAddressInput)
-    {
-        emptyAddress = emptyAddressInput;
-        parentAddress = parentAddressInput;
-    }
-
     Victim(uint64_t maxFrameInput, word_t longestDistnaceInput, uint64_t parentAddressInput)
     {
         maxFrame = maxFrameInput;
@@ -99,11 +85,14 @@ uint64_t __get_cylindrical_distance(uint64_t address_a, uint64_t address_b)
     return (result1 < result2) ? result1 : result2;
 }
 
-Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t parentAddress = 0)
+Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, uint64_t parentAddress = 0, uint64_t virtualAddress = 0)
 {
     if (depth == TABLES_DEPTH)
     {
-        return Victim(root, parentAddress);
+        Victim victim = Victim();
+        victim.longestDistnaceAddress = virtualAddress;
+        victim.parentAddress = parentAddress;
+        return victim;
     }
 
     word_t new_root;
@@ -120,14 +109,15 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
         if (new_root != 0)
         {
             empty = false;
-            curr_table = __DFS(base_address, new_root, depth + 1, (uint64_t)root * PAGE_SIZE + i);
+            curr_table = __DFS(base_pa, new_root, depth + 1, (uint64_t)root * PAGE_SIZE + i, virtualAddress << OFFSET_WIDTH + i);
             if (curr_table.emptyAddress != 0)
             {
                 return curr_table;
             }
-            if ((max_distance_address == 0) || (__get_cylindrical_distance(base_address, max_distance_address) <
-                                                __get_cylindrical_distance(base_address, curr_table.longestDistnaceAddress)))
+            if ((max_distance_address == 0) || (__get_cylindrical_distance(base_va, max_distance_address) <
+                                                __get_cylindrical_distance(base_va, curr_table.longestDistnaceAddress)))
             {
+
                 max_distance_address = curr_table.longestDistnaceAddress;
                 newParentAddress = curr_table.parentAddress;
                 std::cout << "root: " << root << " max_distance_address: " << max_distance_address << std::endl;
@@ -135,10 +125,13 @@ Victim __DFS(word_t base_address, word_t root = 0, int depth = 0, uint64_t paren
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
     }
-    if (empty == true && root != base_address)
+    if (empty == true && root != base_pa)
     {
         std::cout << "empty table found" << std::endl;
-        return Victim((uint64_t)root, parentAddress);
+        Victim victim = Victim();
+        victim.parentAddress = parentAddress;
+        victim.emptyAddress = (uint64_t)root;
+        return victim;
     }
     std::cout << "root: " << root << " return max_distance_address: " << max_distance_address << std::endl;
     return Victim(max_frame_address, max_distance_address, newParentAddress);
@@ -193,7 +186,7 @@ word_t __VMaccess(VirtualAdressStruct va)
         PMread(physical_address, &new_address);
         if (new_address == 0)
         {
-            victim = __DFS(curr_address);
+            victim = __DFS(curr_address, va.page);
             new_frame = __create_frame(va, physical_address, victim);
             new_address = new_frame;
             if (i < TABLES_DEPTH - 1)
