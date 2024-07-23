@@ -116,7 +116,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
             {
                 return curr_table;
             }
-            if ((max_distance_va == 0) || (__get_cylindrical_distance(base_va, max_distance_va) <
+            if ((max_distance_pa == 0) || (__get_cylindrical_distance(base_va, max_distance_va) <
                                            __get_cylindrical_distance(base_va, curr_table.evicted_va)))
             {
 
