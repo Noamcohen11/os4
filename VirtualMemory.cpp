@@ -246,5 +246,6 @@ int main()
     VMread(6, &value);
     std::cout << "///////////////////////// start read from 31 /////////////////////////" << std::endl;
     VMread(31, &value);
+    std::cout << "///////////////////////// end /////////////////////////" << std::endl;
     return 0;
 }
