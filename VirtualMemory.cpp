@@ -93,7 +93,6 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         victim.evicted_va = virtualAddress;
         victim.evicted_pa = root;
         victim.parentAddress = parentAddress;
-        std::cout << "leaf virtual address: " << virtualAddress << "parent address: " << parentAddress << std::endl;
         return victim;
     }
 
