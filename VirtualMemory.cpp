@@ -156,7 +156,7 @@ word_t __create_frame(VirtualAdressStruct va, uint64_t curr_address, Victim vict
     else
     {
         std::cout << "evicted_va: " << victim.evicted_va << std::endl;
-        address = victim.evicted_va;
+        address = victim.evicted_pa;
         std::cout << "victim.parentAddress: " << victim.parentAddress << std::endl;
         PMwrite(victim.parentAddress, 0);
         std::cout << "wrote in distance" << std::endl;
