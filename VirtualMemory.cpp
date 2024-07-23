@@ -247,14 +247,14 @@ int main()
     word_t value;
     VirtualAdressStruct va(testAddress);
     va.printAddress();
-    // VMwrite(testAddress, 3);
-    // std::cout << "///////////////////////// start read from 6 /////////////////////////" << std::endl;
-    // VMread(6, &value);
-    // std::cout << "///////////////////////// start read from 31 /////////////////////////" << std::endl;
-    // VMread(31, &value);
-    // std::cout << "///////////////////////// start read from 13 /////////////////////////" << std::endl;
-    // VMread(testAddress, &value);
-    // std::cout << "///////////////////////// end /////////////////////////" << std::endl;
+    VMwrite(testAddress, 3);
+    std::cout << "///////////////////////// start read from 6 /////////////////////////" << std::endl;
+    VMread(6, &value);
+    std::cout << "///////////////////////// start read from 31 /////////////////////////" << std::endl;
+    VMread(31, &value);
+    std::cout << "///////////////////////// start read from 13 /////////////////////////" << std::endl;
+    VMread(testAddress, &value);
+    std::cout << "///////////////////////// end /////////////////////////" << std::endl;
 
     return 0;
 }
