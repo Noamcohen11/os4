@@ -92,6 +92,7 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         Victim victim = Victim();
         victim.longestDistnaceAddress = virtualAddress;
         victim.parentAddress = parentAddress;
+        std::cout << "leaf virtual address: " << root << "parent address: " << parentAddress << std::endl;
         return victim;
     }
 
@@ -120,7 +121,6 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
 
                 max_distance_address = curr_table.longestDistnaceAddress;
                 newParentAddress = curr_table.parentAddress;
-                std::cout << "root: " << root << " max_distance_address: " << max_distance_address << std::endl;
             }
             max_frame_address = MAX(MAX(max_frame_address, curr_table.maxFrame), new_root);
         }
@@ -133,7 +133,6 @@ Victim __DFS(word_t base_pa, u_int64_t base_va, word_t root = 0, int depth = 0, 
         victim.emptyAddress = (uint64_t)root;
         return victim;
     }
-    std::cout << "root: " << root << " return max_distance_address: " << max_distance_address << std::endl;
     return Victim(max_frame_address, max_distance_address, newParentAddress);
 }
 
