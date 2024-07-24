@@ -18,6 +18,7 @@ struct VirtualAdressStruct
     VirtualAdressStruct(uint64_t virtualAddress)
     {
         uint64_t page_mask = (PAGE_SIZE - 1);
+        std::cout << "PAGE_SIZE: " << PAGE_SIZE << std::endl;
         offset = virtualAddress & page_mask;
         page = virtualAddress >> OFFSET_WIDTH;
 
