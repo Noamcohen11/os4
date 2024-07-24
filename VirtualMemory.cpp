@@ -25,6 +25,7 @@ struct VirtualAdressStruct
         {
             tables[TABLES_DEPTH - 1 - i] = (page >> (OFFSET_WIDTH * i)) & page_mask;
         }
+        std::cout << " offset: " << offset << std::endl;
         for (int i = TABLES_DEPTH - 1; i > -1; i--)
         {
             std::cout << "TABLES_DEPTH: " << TABLES_DEPTH << " tables[" << i << "]:" << tables[i] << std::endl;
