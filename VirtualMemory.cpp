@@ -15,9 +15,10 @@ struct VirtualAdressStruct
     uint64_t offset;
     uint64_t tables[TABLES_DEPTH];
 
-    VirtualAdressStruct(uint64_t virtualAddress)
+    VirtualAdressStruct(uint64_t virtualAddressInput)
     {
         uint64_t page_mask = (PAGE_SIZE - 1);
+        uint64_t virtualAddress = virtualAddressInput % VIRTUAL_MEMORY_SIZE;
         std::cout << "virtualAddress: " << virtualAddress << std::endl;
         offset = virtualAddress & page_mask;
         page = virtualAddress >> OFFSET_WIDTH;
