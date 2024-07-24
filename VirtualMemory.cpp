@@ -1,6 +1,6 @@
 #include "VirtualMemory.h"
 #include "PhysicalMemory.h"
-
+#include <iostream>
 #include <bitset>
 
 template <typename T>
