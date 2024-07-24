@@ -1,5 +1,6 @@
 #include "VirtualMemory.h"
 #include "PhysicalMemory.h"
+#include <iostream>
 #include <bitset>
 
 template <typename T>
@@ -203,6 +204,7 @@ int VMread(uint64_t virtualAddress, word_t *value)
 {
     if (virtualAddress > VIRTUAL_MEMORY_SIZE)
     {
+        std::cout << "wrong address" << std::endl;
         return 0;
     }
     VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
@@ -222,6 +224,7 @@ int VMwrite(uint64_t virtualAddress, word_t value)
 {
     if (virtualAddress > VIRTUAL_MEMORY_SIZE)
     {
+        std::cout << "wrong address" << std::endl;
         return 0;
     }
     VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
