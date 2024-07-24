@@ -1,6 +1,5 @@
 #include "VirtualMemory.h"
 #include "PhysicalMemory.h"
-#include <iostream>
 #include <bitset>
 
 template <typename T>
@@ -15,22 +14,15 @@ struct VirtualAdressStruct
     uint64_t offset;
     uint64_t tables[TABLES_DEPTH];
 
-    VirtualAdressStruct(uint64_t virtualAddressInput)
+    VirtualAdressStruct(uint64_t virtualAddress)
     {
         uint64_t page_mask = (PAGE_SIZE - 1);
-        uint64_t virtualAddress = virtualAddressInput % VIRTUAL_MEMORY_SIZE;
-        std::cout << "virtualAddress: " << virtualAddress << std::endl;
         offset = virtualAddress & page_mask;
         page = virtualAddress >> OFFSET_WIDTH;
 
         for (int i = TABLES_DEPTH - 1; i > -1; i--)
         {
             tables[TABLES_DEPTH - 1 - i] = (page >> (OFFSET_WIDTH * i)) & page_mask;
-        }
-        std::cout << " offset: " << offset << std::endl;
-        for (int i = TABLES_DEPTH - 1; i > -1; i--)
-        {
-            std::cout << "TABLES_DEPTH: " << TABLES_DEPTH << " tables[" << i << "]:" << tables[i] << std::endl;
         }
     }
 };
@@ -209,6 +201,10 @@ word_t __VMaccess(VirtualAdressStruct va)
  */
 int VMread(uint64_t virtualAddress, word_t *value)
 {
+    if (virtualAddress > VIRTUAL_MEMORY_SIZE)
+    {
+        return 0;
+    }
     VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
     word_t address = __VMaccess(va);
     // std::cout << "read in VMread" << std::endl;
@@ -224,6 +220,10 @@ int VMread(uint64_t virtualAddress, word_t *value)
  */
 int VMwrite(uint64_t virtualAddress, word_t value)
 {
+    if (virtualAddress > VIRTUAL_MEMORY_SIZE)
+    {
+        return 0;
+    }
     VirtualAdressStruct va = VirtualAdressStruct(virtualAddress);
     word_t address = __VMaccess(va);
     PMwrite((uint64_t)address * PAGE_SIZE + va.offset, value);
